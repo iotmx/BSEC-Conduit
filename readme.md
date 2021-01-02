@@ -23,7 +23,7 @@ Also, originally based in @rstoermer project.
 
 ## Installation
 This example is to be installed into a Python venv located at `/opt/bsec` with the
-user `pi` on a Raspbian distro (Raspbian/Hassbian). 
+user `pi` on a Raspbian distro.
 
 - `sudo mkdir /opt/bsec` Create the directory.
 - `sudo chown pi:pi /opt/bsec` Change permissions on the directory.
