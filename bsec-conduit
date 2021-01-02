@@ -68,6 +68,10 @@ def main():
     cache_Pressure = deque(maxlen=cache_size)
     cache_Gas = deque(maxlen=cache_size)
 
+    cache_IAQ_Static = deque(maxlen=cache_size)
+    cache_CO2e = deque(maxlen=cache_size)
+    cache_VOCe = deque(maxlen=cache_size)
+
     # Set Initial Timestamp (if we're in debug mode.)
     if log_level == logging.DEBUG: timestamp = time.time()
 
@@ -97,6 +101,10 @@ def main():
         cache_Pressure.append(float(sample['Pressure']))
         cache_Gas.append(int(sample['Gas']))
 
+        cache_IAQ_Static.append(float(sample['IAQ_Static']))
+        cache_CO2e.append(float(sample['CO2e']))
+        cache_VOCe.append(float(sample['VOCe']))        
+
         # Increment counter.
         count += 1
 
@@ -124,14 +132,20 @@ def main():
             Pressure = round(mean(cache_Pressure), 2)
             Gas = int(mean(cache_Gas))
 
+            IAQ_Static = round(mean(cache_IAQ_Static), 2)
+            CO2e = round(mean(cache_CO2e), 2)
+            VOCe = round(mean(cache_VOCe), 2)
+
             # Reset Counter
             count = 0
 
             # Debug: More timing information!
             if log_level == logging.DEBUG:
                 log.debug("Read {} samples over {} seconds from BSEC-Library.".format(num_samples, cache_update_rate))
-                log.debug("IAQ Accuracy: {} | IAQ: {} | Temperature: {} | Humidity: {} | Pressure: {} | Gas: {}".format(
-                IAQ_Accuracy, IAQ, Temperature, Humidity, Pressure, Gas))
+#                log.debug("IAQ Accuracy: {} | IAQ: {} | Temperature: {} | Humidity: {} | Pressure: {} | Gas: {}".format(
+#                IAQ_Accuracy, IAQ, Temperature, Humidity, Pressure, Gas))
+                log.debug("IAQ Accuracy: {} | IAQ: {} | Temperature: {} | Humidity: {} | Pressure: {} | Gas: {} | IAQ Static: {} | CO2e: {} | VOCe: {}".format(
+                IAQ_Accuracy, IAQ, Temperature, Humidity, Pressure, Gas, IAQ_Static, CO2e, VOCe))
 
             # Publish data to MQTT.
             mqttc.publish('{}/iaq_accuracy'.format(mqtt_topic), payload=IAQ_Accuracy, retain=True)
@@ -140,6 +154,10 @@ def main():
             mqttc.publish('{}/humidity'.format(mqtt_topic), payload=Humidity, retain=True)
             mqttc.publish('{}/pressure'.format(mqtt_topic), payload=Pressure, retain=True)
             mqttc.publish('{}/gas'.format(mqtt_topic), payload=Gas, retain=True)
+
+            mqttc.publish('{}/iaq_static'.format(mqtt_topic), payload=IAQ_Static, retain=True)
+            mqttc.publish('{}/CO2e'.format(mqtt_topic), payload=CO2e, retain=True)
+            mqttc.publish('{}/VOCe'.format(mqtt_topic), payload=VOCe, retain=True)
 
     ## End of Main Loop ##
 
@@ -156,7 +174,8 @@ def mqtt_discovery(client):
         log.debug('Publishing MQTT Discovery Topics: {}/sensor/{}/bme680_*/config'.format(discovery_prefix, mqtt_client_id))
 
     # Topic names.
-    config_topics = ['iaq_accuracy', 'iaq', 'temperature', 'humidity', 'pressure', 'gas']
+    # config_topics = ['iaq_accuracy', 'iaq', 'temperature', 'humidity', 'pressure', 'gas']
+    config_topics = ['iaq_accuracy', 'iaq', 'temperature', 'humidity', 'pressure', 'gas', 'iaq_static', 'CO2e', 'VOCe']
     # Config payloads.
     config_payloads = [json.dumps({
     'name': 'BME680 IAQ Accuracy',
@@ -201,6 +220,27 @@ def mqtt_discovery(client):
     'availability_topic': '{}/status'.format(mqtt_topic),
     'unit_of_measurement': 'Ω',
     'icon': 'mdi:gas-cylinder'
+    }),
+    json.dumps({
+    'name': 'BME680 Static IAQ index',
+    'state_topic': '{}/iaq_static'.format(mqtt_topic),
+    'availability_topic': '{}/status'.format(mqtt_topic),
+    'unit_of_measurement': 's-IAQ',
+    'icon': 'mdi:gauge'
+    }),
+    json.dumps({
+    'name': 'BME680 CO2 equivalent',
+    'state_topic': '{}/CO2e'.format(mqtt_topic),
+    'availability_topic': '{}/status'.format(mqtt_topic),
+    'unit_of_measurement': 'ppm',
+    'icon': 'mdi:gauge'
+    }),
+    json.dumps({
+    'name': 'BME680 Breath VOC equivalent',
+    'state_topic': '{}/VOCe'.format(mqtt_topic),
+    'availability_topic': '{}/status'.format(mqtt_topic),
+    'unit_of_measurement': 'ppm',
+    'icon': 'mdi:gauge'
     })]
     # Publish discovery config topics.
     for topic, payload in zip(config_topics, config_payloads):
