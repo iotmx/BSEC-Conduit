@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 # BSECLibrary - (C) 2018 TimothyBrown
-
+# This file as been modified for BSEC version 1.4.8.0 2021 GuillermoRamirez
 Uses the Bosch BSEC sensor fusion library to communicate with a BME680.
 
 
@@ -178,7 +178,8 @@ class BSECLibrary:
                 # If we are, test to see if we're on a ARMv8 machine.
                 if rpi_processor is 'BCM2837':
                     self.log.info('Detected architecture as ARMv8 64-Bit.')
-                    return 'Normal_version/RaspberryPI/PiThree_ArmV8-a-64bits'
+                    # return 'Normal_version/RaspberryPI/PiThree_ArmV8-a-64bits'
+                    return 'normal_version/bin/RaspberryPi/PiThree_ArmV8'
                 # Then test for ARMv7.
                 elif rpi_processor is 'BCM2836':
                     self.log.info('Detected architecture as ARMv7 32-Bit.')
@@ -186,7 +187,8 @@ class BSECLibrary:
                 # Finally test for ARMv6.
                 elif rpi_processor is 'BCM2835':
                     self.log.info('Detected architecture as ARMv6 32-Bit.')
-                    return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    # return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    return 'normal_version/bin/RaspberryPi/PiThree_ArmV6'
             # Well, I guess we're not on a Pi... Let's take a stab at it anyway!
             # Note: The underlying `RaspberryPI/Pi*` libraries will work on non-Pi
             # systems, as long as it's an ARM processor running Linux.
@@ -234,12 +236,12 @@ class BSECLibrary:
                             '-Wno-unused-variable',
                             '-static',
                             '-iquote{}/API'.format(src_dir),
-                            '-iquote{}/algo/bin/{}'.format(src_dir, lib_arch),
+                            '-iquote{}/algo/{}'.format(src_dir, lib_arch),
                             '-iquote{}/examples'.format(src_dir),
                             '{}/API/bme680.c'.format(src_dir),
-                            '{}/examples/bsec_integration.c'.format(src_dir),
+                            '{}/examples/bsec_iot_example/bsec_integration.c'.format(src_dir),
                             '{}/bsec-library.c'.format(src_dir),
-                            '-L{}/algo/bin/{}'.format(src_dir, lib_arch),
+                            '-L{}/algo/{}'.format(src_dir, lib_arch),
                             '-lalgobsec',
                             '-lm',
                             '-lrt',
