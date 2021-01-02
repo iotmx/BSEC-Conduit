@@ -183,7 +183,8 @@ class BSECLibrary:
                 # Then test for ARMv7.
                 elif rpi_processor is 'BCM2836':
                     self.log.info('Detected architecture as ARMv7 32-Bit.')
-                    return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    # return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    return 'normal_version/bin/RaspberryPi/PiThree_ArmV6'
                 # Finally test for ARMv6.
                 elif rpi_processor is 'BCM2835':
                     self.log.info('Detected architecture as ARMv6 32-Bit.')
@@ -196,11 +197,13 @@ class BSECLibrary:
                 # Test for ARMv8.
                 if 'armv8' in machine:
                     self.log.info('Detected architecture as ARMv8 64-Bit.')
-                    return 'Normal_version/RaspberryPI/PiThree_ArmV8-a-64bits'
+                    # return 'Normal_version/RaspberryPI/PiThree_ArmV8-a-64bits'
+                    return 'normal_version/bin/RaspberryPi/PiThree_ArmV8'
                 # Then we must be on a 32-Bit platform.
                 else:
                     self.log.info('Detected architecture as ARM{} 32-Bit.'.format(machine[3:]))
-                    return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    # return 'Normal_version/RaspberryPI/PiZero_ArmV6-32bits'
+                    return 'normal_version/bin/RaspberryPi/PiThree_ArmV6'
             # Catch all in case something went wrong.
             self.log.error("Encountered an unknown error trying to determine system architecture.")
             raise BSECLibraryError()
