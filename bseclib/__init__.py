@@ -240,7 +240,7 @@ class BSECLibrary:
                             '-static',
                             '-iquote{}/BME680_driver-bme680_v3.5.10'.format(base_dir),
                             '-iquote{}/algo/{}'.format(src_dir, lib_arch),
-                            '-iquote{}/examples'.format(src_dir),
+                            '-iquote{}/examples/bsec_iot_example'.format(src_dir),
                             '{}/BME680_driver-bme680_v3.5.10/bme680.c'.format(base_dir),
                             '{}/examples/bsec_iot_example/bsec_integration.c'.format(src_dir),
                             '{}/bsec-library.c'.format(src_dir),
