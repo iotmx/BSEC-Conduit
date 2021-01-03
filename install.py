@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """BSEC-Conduit Installer - 2018.11.16 - (C) 2018 TimothyBrown
+Updated for BSEC v1.4.8.0 by iotmx 2021.02.01 Guillermo Ramirez
 Usage: Run `sudo python3 install.py` in the directory you want to install to.
 """
 
