@@ -235,8 +235,8 @@ class BSECLibrary:
 
             # See if we need to write the source file.
             self.log.warning("Writing BSEC integration source file: {}/examples/bsec_iot_example/bsec_integration.c".format(src_dir))
-                with open('{}/examples/bsec_iot_example/bsec_integration.c'.format(src_dir), 'wb') as f:
-                    f.write(bsec_integration_c.encode('UTF-8'))
+            with open('{}/examples/bsec_iot_example/bsec_integration.c'.format(src_dir), 'wb') as f:
+                f.write(bsec_integration_c.encode('UTF-8'))
 
             lib_arch = arch()
             # Generate the build command.
